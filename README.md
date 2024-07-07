@@ -1,2 +1,2 @@
 # letterboxdratingremover
-Greasemonkey script for Removing Letterboxd Ratings
+Greasemonkey script for removing Letterboxd ratings from the films page.
