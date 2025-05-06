@@ -16,7 +16,7 @@ Have fun.
 
 
 ## To Customize
- You can just remove any line of code you want. Workflow is explained through comments.
+ You can just remove any line of code you want. Workflow is explained through comments. Do not forget to delete the function from the bottom!
  
     // Hides film ratings from the films' pages
     function hideRatingsChart() {
