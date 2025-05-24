@@ -69,10 +69,11 @@
 
   	// Hides the stories section from the homepage
     function hideProAds() {
-        const element = document.querySelector('.banner.banner-950.js-hide-in-app');
-        if (element) {
-            element.style.display = 'none';
-        }
+        const sections = document.querySelectorAll('.banner.banner-950.js-hide-in-app');
+
+        sections.forEach(section => {
+            section.style.display = 'none';
+        });
     }
   	//If you want to remove this function, delete between the comments.
 
@@ -221,6 +222,18 @@
         //If you want to remove this function, delete between the comments.
 
 
+                      // Hides the Pro Ad on your Profile
+      function hideProfileProAd() {
+        const sections = document.querySelectorAll('.banner.banner-250.js-hide-in-app');
+
+        sections.forEach(section => {
+            section.style.display = 'none';
+        });
+    }
+        //If you want to remove this function, delete between the comments.
+
+
+
 
     // Initial checks
     hideRatingsChart();
@@ -241,6 +254,7 @@
     removeAttributionClassForBigFilmCounts();
     hideNanoCrowd();
     hideReportFlag();
+    hideProfileProAd();
 
 
 
@@ -264,6 +278,7 @@
         removeAttributionClassForBigFilmCounts();
         hideNanoCrowd();
         hideReportFlag();
+        hideProfileProAd();
 
 
     });
