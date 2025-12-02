@@ -70,7 +70,7 @@
 
     // Hides the stories section from the homepage
     function hideProAds() {
-        const sections = document.querySelectorAll('.banner.banner-950.js-hide-in-app');
+        const sections = document.querySelectorAll('.banner.banner-950.js-hide-in-app, .banner.banner-250.js-hide-in-app, .banner.banner-230.js-hide-in-app');
 
         sections.forEach(section => {
             section.style.display = 'none';
@@ -183,21 +183,36 @@
 
     // Hides the Lists with more than 200 films in the Film's Page
     function removeAttributionClassForBigFilmCounts() {
-        const values = document.querySelectorAll('section.list small.value');
+        // 1. Check if the current URL starts with /film/
+    if (!window.location.pathname.startsWith('/film/')) {
+        return; // Exit the function if we are not on a film page
+    }
 
-        values.forEach(el => {
-            const text = el.textContent.trim();
-            if (text.endsWith('films')) {
-                const number = parseInt(text.replace(/[^\d]/g, ''), 10);
-                if (number > 200) {
-                    const section = el.closest('section.list');
-                    if (section) {
-                        section.remove();
-                    }
+    // 2. The rest of the logic only runs on film pages
+    const values = document.querySelectorAll('.value');
+
+    values.forEach(el => {
+        const text = el.textContent.trim();
+
+        // Checks if the text ends with 'films'
+        if (text.endsWith('films')) {
+            // Extracts the number only.
+            const number = parseInt(text.replace(/[^\d]/g, ''), 10);
+
+            // Checks if the extracted number is greater than 200
+            if (number > 200) {
+                // Finds the closest ancestor element with the class 'listitem js-listitem'
+                const listItem = el.closest('.listitem.js-listitem');
+
+                // If the parent list item is found, remove it from the DOM
+                if (listItem) {
+                    listItem.remove();
                 }
             }
-        });
-    }
+        }
+    });
+}
+
     //If you want to remove this function, delete between the comments.
 
 
@@ -220,22 +235,11 @@
             section.style.display = 'none';
         });
     }
-    //If you want to remove this function, delete between the comments.
 
-
-    // Hides the Pro Ad on your Profile
-    function hideProfileProAd() {
-        const sections = document.querySelectorAll('.banner.banner-250.js-hide-in-app');
-
-        sections.forEach(section => {
-            section.style.display = 'none';
-        });
-    }
-    //If you want to remove this function, delete between the comments.
 
 
 // NEW FUNCTION: Removes activity rows on the /activity/ page unless they contain one of the specified profile names. BUT IT DOES NOT REMOVE REVIEWS. IF YOU WANT TO REMOVE REVIEWS OF UNSPECIFIED PEOPLE AS WELL CHECK THE COMMENTS BELOW
-#function filterActivityRowsByHref() {
+function filterActivityRowsByHref() {
     // Only run on the /activity/ page
     if (!window.location.pathname.startsWith('/activity/')) {
         return;
@@ -244,9 +248,8 @@
     // Define an array of all allowed user hrefs
     // ADD MORE HREFS HERE (make sure they start and end with '/')
     const allowedHrefs = [
-        '/berkborazan/',
         '/berkaygundz/',
-        '/exampleuser/', // Example of adding a third user
+        '/terribleivan/', // Example of adding a third user
     ];
 
   // SO BECAUSE IT CHOOSES -BASIC it does not remove reviews from unrelated persons. If you want to remove them as well, just change the line below to
@@ -297,7 +300,6 @@
     removeAttributionClassForBigFilmCounts();
     hideNanoCrowd();
     hideReportFlag();
-    hideProfileProAd();
     filterActivityRowsByHref(); // <-- NEW FUNCTION CALL HERE
 
 
@@ -321,7 +323,6 @@
         removeAttributionClassForBigFilmCounts();
         hideNanoCrowd();
         hideReportFlag();
-        hideProfileProAd();
         filterActivityRowsByHref(); // <-- NEW FUNCTION CALL HERE
     });
 
