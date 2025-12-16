@@ -9,14 +9,14 @@
 // @include     *://letterboxd.com/film/*/crew/*
 // @include     *://letterboxd.com/film/*/studios/*
 // @include     *://letterboxd.com/film/*/genres/*
-// @include     *://letterboxd.com/activity/*                // <-- ADDED THIS INCLUDE
+// @include     *://letterboxd.com/activity/*                
 // @exclude     *://letterboxd.com/film/*/views/*
 // @exclude     *://letterboxd.com/film/*/lists/*
 // @exclude     *://letterboxd.com/film/*/likes/*
 // @exclude     *://letterboxd.com/film/*/fans/*
 // @exclude     *://letterboxd.com/film/*/ratings/*
 // @exclude     *://letterboxd.com/film/*/reviews/*
-// @version     1.2                                        // <-- UPDATED VERSION
+// @version     1.3                                        
 // @grant       none
 // @run-at      document-end
 // ==/UserScript==
@@ -31,7 +31,7 @@
             element.style.display = 'none';
         }
     }
-    //If you want to remove this function, delete between the comments.
+
 
 
 
@@ -42,7 +42,7 @@
             element.style.display = 'none';
         });
     }
-    //If you want to remove this function, delete between the comments.
+
 
 
     // Hides the stories section from the homepage
@@ -52,20 +52,23 @@
             element.style.display = 'none';
         }
     }
-    //If you want to remove this function, delete between the comments.
 
 
-    // Hides ratings given by your friends for the films you have not watched yet
-    function removePosterViewingData() {
+
+// Hides ratings given by your friends for the films you have not watched yet
+function removePosterViewingData() {
         const elements = document.querySelectorAll('.poster-viewingdata');
         elements.forEach(element => {
-            const parent = element.closest('.poster-container.viewing-poster-container.film-not-watched');
-            if (parent) {
-                element.remove();
-            }
+            // Instead of checking for a specific parent, we look inside
+            // the .poster-viewingdata element itself for any rating classes.
+            const ratings = element.querySelectorAll('[class^="rating rated"]');
+
+            ratings.forEach(rating => {
+                rating.remove();
+            });
         });
     }
-    //If you want to remove this function, delete between the comments.
+
 
 
     // Hides the stories section from the homepage
@@ -76,7 +79,7 @@
             section.style.display = 'none';
         });
     }
-    //If you want to remove this function, delete between the comments.
+
 
 
     // Hides the average ratings /films/popular overlay. This currently also removes the titles of movies alongside with ratings, will be fixed later.
@@ -86,7 +89,7 @@
             element.removeAttribute('data-original-title')
         });
     }
-    //If you want to remove this function, delete between the comments.
+
 
     // Hides the Main "Welcome Back" Title.
     function hideMainTitle() {
@@ -95,7 +98,7 @@
             element.style.display = 'none';
         }
     }
-    //If you want to remove this function, delete between the comments.
+
 
 
     // Hides the Main Showdowns
@@ -105,7 +108,6 @@
             element.style.display = 'none';
         }
     }
-    //If you want to remove this function, delete between the comments.
 
 
     function hideShowdownsSection() {
@@ -126,7 +128,6 @@
             element.style.display = 'none';
         }
     }
-    //If you want to remove this function, delete between the comments.
 
     // Hides the Members Title.
     function hideJournal() {
@@ -135,7 +136,6 @@
             element.style.display = 'none';
         }
     }
-    //If you want to remove this function, delete between the comments.
 
 
     // Hides the Footer
@@ -145,7 +145,6 @@
             element.style.display = 'none';
         }
     }
-    //If you want to remove this function, delete between the comments.
 
 
     // Hides the Film News Section in the Film's Page
@@ -157,7 +156,6 @@
         });
     }
 
-    //If you want to remove this function, delete between the comments.
 
 
     // Hides the Where to Watch Section in the Film's Page
@@ -168,7 +166,6 @@
             section.style.display = 'none';
         });
     }
-    //If you want to remove this function, delete between the comments.
 
 
     // Hides the Mentioned By Section in the Film's Page
@@ -178,7 +175,6 @@
             section.style.display = 'none';
         }
     }
-    //If you want to remove this function, delete between the comments.
 
 
     // Hides the Lists with more than 200 films in the Film's Page
@@ -213,7 +209,6 @@
     });
 }
 
-    //If you want to remove this function, delete between the comments.
 
 
     // Hides the NanoCrowd Attribution in the Film's Page
@@ -224,7 +219,6 @@
             section.style.display = 'none';
         });
     }
-    //If you want to remove this function, delete between the comments.
 
 
     // Hides the off-center report flag in the Film's Page
@@ -238,18 +232,25 @@
 
 
 
-// NEW FUNCTION: Removes activity rows on the /activity/ page unless they contain one of the specified profile names. BUT IT DOES NOT REMOVE REVIEWS. IF YOU WANT TO REMOVE REVIEWS OF UNSPECIFIED PEOPLE AS WELL CHECK THE COMMENTS BELOW
+// Removes activity rows on the /activity/ page unless they contain one of the specified profile names. BUT IT DOES NOT REMOVE REVIEWS. IF YOU WANT TO REMOVE REVIEWS OF UNSPECIFIED PEOPLE AS WELL CHECK THE COMMENTS BELOW
 function filterActivityRowsByHref() {
     // Only run on the /activity/ page
     if (!window.location.pathname.startsWith('/activity/')) {
         return;
     }
 
+  // 2. NEW CHECK: If the address is /activity/incoming/, stop the function immediately so it doesn't filter anything
+    if (window.location.pathname.includes('/incoming/')) {
+        return;
+    }
+
+
     // Define an array of all allowed user hrefs
     // ADD MORE HREFS HERE (make sure they start and end with '/')
     const allowedHrefs = [
         '/berkaygundz/',
-        '/terribleivan/', // Example of adding a third user
+        '/terribleivan/', // Example of adding additional users
+      '/seaque/',
     ];
 
   // SO BECAUSE IT CHOOSES -BASIC it does not remove reviews from unrelated persons. If you want to remove them as well, just change the line below to
@@ -276,7 +277,6 @@ function filterActivityRowsByHref() {
         }
     });
 }
-//If you want to remove this function, delete between the comments.
 
 
     // --- FUNCTION CALLS ---
