@@ -9,14 +9,14 @@
 // @include     *://letterboxd.com/film/*/crew/*
 // @include     *://letterboxd.com/film/*/studios/*
 // @include     *://letterboxd.com/film/*/genres/*
-// @include     *://letterboxd.com/activity/*                
+// @include     *://letterboxd.com/activity/*
 // @exclude     *://letterboxd.com/film/*/views/*
 // @exclude     *://letterboxd.com/film/*/lists/*
 // @exclude     *://letterboxd.com/film/*/likes/*
 // @exclude     *://letterboxd.com/film/*/fans/*
 // @exclude     *://letterboxd.com/film/*/ratings/*
 // @exclude     *://letterboxd.com/film/*/reviews/*
-// @version     1.3                                        
+// @version     1.3
 // @grant       none
 // @run-at      document-end
 // ==/UserScript==
@@ -69,6 +69,19 @@ function removePosterViewingData() {
         });
     }
 
+// Hides ratings given by your friends for the films you have not watched yet
+function removePopularReviewsRating() {
+        const elements = document.querySelectorAll('.content-reactions-strip.-viewing');
+        elements.forEach(element => {
+            // Instead of checking for a specific parent, we look inside
+            // the .poster-viewingdata element itself for any rating classes.
+            const ratings = element.querySelectorAll('[class^="rating -green rated"]');
+
+            ratings.forEach(rating => {
+                rating.remove();
+            });
+        });
+    }
 
 
     // Hides the stories section from the homepage
@@ -232,7 +245,7 @@ function removePosterViewingData() {
 
 
 
-// Removes activity rows on the /activity/ page unless they contain one of the specified profile names. BUT IT DOES NOT REMOVE REVIEWS. IF YOU WANT TO REMOVE REVIEWS OF UNSPECIFIED PEOPLE AS WELL CHECK THE COMMENTS BELOW
+// NEW FUNCTION: Removes activity rows on the /activity/ page unless they contain one of the specified profile names. BUT IT DOES NOT REMOVE REVIEWS. IF YOU WANT TO REMOVE REVIEWS OF UNSPECIFIED PEOPLE AS WELL CHECK THE COMMENTS BELOW
 function filterActivityRowsByHref() {
     // Only run on the /activity/ page
     if (!window.location.pathname.startsWith('/activity/')) {
@@ -249,7 +262,7 @@ function filterActivityRowsByHref() {
     // ADD MORE HREFS HERE (make sure they start and end with '/')
     const allowedHrefs = [
         '/berkaygundz/',
-        '/terribleivan/', // Example of adding additional users
+        '/terribleivan/', // Example of adding a third user
       '/seaque/',
     ];
 
@@ -300,7 +313,8 @@ function filterActivityRowsByHref() {
     removeAttributionClassForBigFilmCounts();
     hideNanoCrowd();
     hideReportFlag();
-    filterActivityRowsByHref(); // <-- NEW FUNCTION CALL HERE
+    filterActivityRowsByHref();
+  removePopularReviewsRating();
 
 
     // Create a MutationObserver to watch for changes in the DOM
@@ -323,7 +337,8 @@ function filterActivityRowsByHref() {
         removeAttributionClassForBigFilmCounts();
         hideNanoCrowd();
         hideReportFlag();
-        filterActivityRowsByHref(); // <-- NEW FUNCTION CALL HERE
+        filterActivityRowsByHref();
+      removePopularReviewsRating();
     });
 
     // Start observing the document
